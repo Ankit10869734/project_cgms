@@ -5,3 +5,4 @@ django-cors-headers>=4.3
 django-allauth[socialaccount]>=0.63
 dj-rest-auth[with_social]>=6.0
 python-dotenv>=1.0
+gunicorn>=21.2
