@@ -131,6 +131,7 @@ LOGIN_REDIRECT_URL = "/auth-success/"
 ACCOUNT_SIGNUP_REDIRECT_URL = "https://cgms-portal.netlify.app/auth/callback"
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 CSRF_TRUSTED_ORIGINS = [
