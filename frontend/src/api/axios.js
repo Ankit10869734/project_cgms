@@ -37,7 +37,7 @@ api.interceptors.response.use(
         localStorage.setItem('access', res.data.access)
 
         originalRequest.headers.Authorization = `Bearer ${res.data.access}`
-        return axios(originalRequest)
+        return api(originalRequest)
 
       } catch (refreshError) {
         localStorage.clear()

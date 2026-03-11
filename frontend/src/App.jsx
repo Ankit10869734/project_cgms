@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useAuthStore } from './store/authStore'
-import Landing from './pages/landing'
+import Landing from './pages/Landing'
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminComplaints from "./pages/AdminComplaints"
 import Login from './pages/Login'

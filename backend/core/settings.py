@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-unsafe')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['cgms-hub.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -127,7 +127,7 @@ SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 
 # Redirects after login/logout
 ACCOUNT_LOGOUT_REDIRECT_URL = "https://cgms-portal.netlify.app/"
-LOGIN_REDIRECT_URL = "/auth-success/"
+LOGIN_REDIRECT_URL = "https://cgms-portal.netlify.app/auth-success/"
 ACCOUNT_SIGNUP_REDIRECT_URL = "https://cgms-portal.netlify.app/auth/callback"
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
@@ -154,3 +154,5 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 USE_TZ = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
