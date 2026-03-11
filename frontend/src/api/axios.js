@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'https://cgms-hub.onrender.com/api',
   withCredentials: true,
 })
 
@@ -30,7 +30,7 @@ api.interceptors.response.use(
           return Promise.reject(error)
         }
         
-        const res = await axios.post('http://localhost:8000/api/auth/token/refresh/', { refresh })
+        const res = await axios.post('https://cgms-hub.onrender.com/api/auth/token/refresh/', { refresh })
         localStorage.setItem('access', res.data.access)
         
         // Retry original request with new token

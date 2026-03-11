@@ -42,7 +42,7 @@ def google_auth_callback(request):
     print(f"Access token generated: {access[:50]}...")
     print(f"Refresh token generated: {refresh[:50]}...")
     
-    redirect_url = f'http://localhost:5173/auth/callback?access={access}&refresh={refresh}'
+    redirect_url = f'https://cgms-portal.netlify.app/auth/callback?access={access}&refresh={refresh}'
     print(f"Redirecting to: {redirect_url[:100]}...")
     print("=" * 60)
     

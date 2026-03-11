@@ -10,8 +10,8 @@ export const useAuthStore = create(
       theme: 'light',
 
       setAuth: (user, accessToken, refreshToken) => {
-        localStorage.setItem('access_token', accessToken)
-        localStorage.setItem('refresh_token', refreshToken)
+        localStorage.setItem('access', accessToken)
+        localStorage.setItem('refresh', refreshToken)
         set({ user, accessToken, refreshToken })
       },
 

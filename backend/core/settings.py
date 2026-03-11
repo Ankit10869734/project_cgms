@@ -8,7 +8,9 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-unsafe')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "cgms-hub.onrender.com",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -122,19 +124,17 @@ SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 
 
 # After Google OAuth, redirect back to React with token in URL
-ACCOUNT_LOGOUT_REDIRECT_URL = "http://localhost:5173/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "https://cgms-portal.netlify.app/"
 LOGIN_REDIRECT_URL = "/auth-success/"
-ACCOUNT_SIGNUP_REDIRECT_URL = "http://localhost:5173/auth/callback"
+ACCOUNT_SIGNUP_REDIRECT_URL = "https://cgms-portal.netlify.app/auth/callback"
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "https://cgms-portal.netlify.app",
 ]
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
+    "https://cgms-portal.netlify.app",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
