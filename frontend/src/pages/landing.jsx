@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useAuthStore } from '../store/authStore'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/axios'
+import { motion } from 'framer-motion'
 
 export default function Landing() {
   const { logout } = useAuthStore()
@@ -55,6 +56,32 @@ export default function Landing() {
   const handleDashboard = () => {
     setDropdownOpen(false)
     navigate('/dashboard')
+  }
+
+  // Animation variants
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0 }
+  }
+
+  const fadeInLeft = {
+    hidden: { opacity: 0, x: -40 },
+    visible: { opacity: 1, x: 0 }
+  }
+
+  const fadeInRight = {
+    hidden: { opacity: 0, x: 40 },
+    visible: { opacity: 1, x: 0 }
+  }
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
   }
 
   return (
@@ -138,20 +165,57 @@ export default function Landing() {
         <div className="hero-grid"></div>
         <div className="hero-glow"></div>
         <div className="hero-content">
-          <div>
-            <div className="hero-tag">COMPLAINT & GRIEVANCE MANAGEMENT SYSTEM</div>
-            <h1 className="hero-title">Your Voice.<span>Heard & Resolved.</span></h1>
-            <p className="hero-sub">Submit, track, and resolve student complaints in real-time.<br/>Transparent. Fast. Accountable.</p>
-            <div className="hero-btns">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInUp} className="hero-tag">
+              COMPLAINT & GRIEVANCE MANAGEMENT SYSTEM
+            </motion.div>
+            <motion.h1 variants={fadeInUp} className="hero-title">
+              Your Voice.<span>Heard & Resolved.</span>
+            </motion.h1>
+            <motion.p variants={fadeInUp} className="hero-sub">
+              Submit, track, and resolve student complaints in real-time.<br/>Transparent. Fast. Accountable.
+            </motion.p>
+            <motion.div variants={fadeInUp} className="hero-btns">
               <Link to="/login" className="btn-primary">✦ REGISTER NOW</Link>
               <Link to="/login" className="btn-secondary">⇒ SIGN IN</Link>
-            </div>
-          </div>
-          <div className="hero-visual">
-            <div className="stat-card"><div className="stat-icon orange">🟠</div><div className="stat-info"><div className="stat-label">Pending</div><div className="stat-val">24</div><div className="stat-note">+2 today</div></div></div>
-            <div className="stat-card"><div className="stat-icon cyan">◑</div><div className="stat-info"><div className="stat-label">In Progress</div><div className="stat-val">11</div><div className="stat-note c">Active</div></div></div>
-            <div className="stat-card"><div className="stat-icon green">✅</div><div className="stat-info"><div className="stat-label">Resolved</div><div className="stat-val">142</div><div className="stat-note g">+3 this week</div></div></div>
-          </div>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="hero-visual"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInRight} className="stat-card">
+              <div className="stat-icon orange">🟠</div>
+              <div className="stat-info">
+                <div className="stat-label">Pending</div>
+                <div className="stat-val">24</div>
+                <div className="stat-note">+2 today</div>
+              </div>
+            </motion.div>
+            <motion.div variants={fadeInRight} className="stat-card">
+              <div className="stat-icon cyan">◑</div>
+              <div className="stat-info">
+                <div className="stat-label">In Progress</div>
+                <div className="stat-val">11</div>
+                <div className="stat-note c">Active</div>
+              </div>
+            </motion.div>
+            <motion.div variants={fadeInRight} className="stat-card">
+              <div className="stat-icon green">✅</div>
+              <div className="stat-info">
+                <div className="stat-label">Resolved</div>
+                <div className="stat-val">142</div>
+                <div className="stat-note g">+3 this week</div>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -159,10 +223,25 @@ export default function Landing() {
       <section id="complaints">
         <div className="grid-bg"></div>
         <div className="section-inner">
-          <div className="section-tag">CATEGORIES</div>
-          <h2 className="section-title">Types of Complaints</h2>
-          <p className="section-sub">Select a category that best describes your grievance</p>
-          <div className="complaints-grid">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="section-tag">CATEGORIES</div>
+            <h2 className="section-title">Types of Complaints</h2>
+            <p className="section-sub">Select a category that best describes your grievance</p>
+          </motion.div>
+
+          <motion.div
+            className="complaints-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={staggerContainer}
+          >
             {[
               { icon: '🎓', title: 'Academic Issues', desc: 'Grading disputes, faculty conduct, exam irregularities, and curriculum-related concerns.' },
               { icon: '🏠', title: 'Hostel & Facilities', desc: 'Accommodation problems, maintenance issues, hygiene, and campus infrastructure complaints.' },
@@ -171,13 +250,18 @@ export default function Landing() {
               { icon: '💻', title: 'IT & Infrastructure', desc: 'Internet access, lab equipment, software access, and technical resource complaints.' },
               { icon: '📋', title: 'Other Grievances', desc: "Any complaint that doesn't fit the above categories — we handle it all." },
             ].map((c, i) => (
-              <div key={i} className="comp-card">
+              <motion.div
+                key={i}
+                variants={fadeInUp}
+                transition={{ duration: 0.5 }}
+                className="comp-card"
+              >
                 <div className="comp-icon">{c.icon}</div>
                 <div className="comp-title">{c.title}</div>
                 <div className="comp-desc">{c.desc}</div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -185,7 +269,13 @@ export default function Landing() {
       <section id="about">
         <div className="section-inner">
           <div className="about-grid">
-            <div>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={fadeInLeft}
+              transition={{ duration: 0.7 }}
+            >
               <div className="section-tag">ABOUT CGMS</div>
               <h2 className="section-title">Built for Students,<br/>By Design</h2>
               <p className="about-desc">CGMS v3.0 is a digital grievance redressal platform built to empower students to raise concerns in a structured, transparent, and accountable manner.<br/><br/>Every complaint is tracked in real-time, assigned to the right authority, and resolved within defined timelines — no more unanswered emails or lost paperwork.</p>
@@ -194,15 +284,27 @@ export default function Landing() {
                   <span key={b} className="badge">{b}</span>
                 ))}
               </div>
-            </div>
-            <div className="about-stats">
+            </motion.div>
+
+            <motion.div
+              className="about-stats"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={staggerContainer}
+            >
               {[['500+','Students Registered'],['142','Complaints Resolved'],['96%','Resolution Rate'],['48h','Avg. Response Time']].map(([val, label]) => (
-                <div key={label} className="astat">
+                <motion.div
+                  key={label}
+                  variants={fadeInRight}
+                  transition={{ duration: 0.5 }}
+                  className="astat"
+                >
                   <div className="astat-val">{val}</div>
                   <div className="astat-label">{label}</div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -211,14 +313,42 @@ export default function Landing() {
       <section id="contact">
         <div className="grid-bg"></div>
         <div className="section-inner">
-          <div className="section-tag">GET IN TOUCH</div>
-          <h2 className="section-title">Contact Us</h2>
-          <p className="section-sub">Reach out to the CGMS support team for help or queries</p>
-          <div className="contact-cards">
-            <div className="contact-card"><div className="contact-icon">📧</div><div className="contact-type">EMAIL</div><div className="contact-val">support@cgms.system</div></div>
-            <div className="contact-card"><div className="contact-icon">📞</div><div className="contact-type">PHONE</div><div className="contact-val">+91 98765 43210</div></div>
-            <div className="contact-card"><div className="contact-icon">🕐</div><div className="contact-type">WORKING HOURS</div><div className="contact-val">Mon – Fri, 9 AM – 5 PM</div></div>
-          </div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="section-tag">GET IN TOUCH</div>
+            <h2 className="section-title">Contact Us</h2>
+            <p className="section-sub">Reach out to the CGMS support team for help or queries</p>
+          </motion.div>
+
+          <motion.div
+            className="contact-cards"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={staggerContainer}
+          >
+            {[
+              { icon: '📧', type: 'EMAIL', val: 'support@cgms.system' },
+              { icon: '📞', type: 'PHONE', val: '+91 98765 43210' },
+              { icon: '🕐', type: 'WORKING HOURS', val: 'Mon – Fri, 9 AM – 5 PM' }
+            ].map((contact, i) => (
+              <motion.div
+                key={i}
+                variants={fadeInUp}
+                transition={{ duration: 0.5 }}
+                className="contact-card"
+              >
+                <div className="contact-icon">{contact.icon}</div>
+                <div className="contact-type">{contact.type}</div>
+                <div className="contact-val">{contact.val}</div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -254,23 +384,20 @@ const landingCSS = `
   .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(0,200,212,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,212,0.07) 1px,transparent 1px); background-size: 40px 40px; }
   .hero-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle,rgba(0,200,212,0.15) 0%,transparent 70%); top: 50%; left: 40%; transform: translate(-50%,-50%); pointer-events: none; }
   .hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 80px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-  .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,212,0.12); border: 1px solid rgba(0,200,212,0.3); color: var(--cyan); font-family: 'Share Tech Mono',monospace; font-size: 11px; letter-spacing: 2px; padding: 6px 14px; border-radius: 3px; margin-bottom: 24px; animation: fadeUp 0.5s ease both; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,212,0.12); border: 1px solid rgba(0,200,212,0.3); color: var(--cyan); font-family: 'Share Tech Mono',monospace; font-size: 11px; letter-spacing: 2px; padding: 6px 14px; border-radius: 3px; margin-bottom: 24px; }
   .hero-tag::before { content: '>'; font-size: 13px; }
-  .hero-title { font-size: clamp(38px,5vw,60px); font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 20px; letter-spacing: -1px; animation: fadeUp 0.7s ease both; }
+  .hero-title { font-size: clamp(38px,5vw,60px); font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 20px; letter-spacing: -1px; }
   .hero-title span { color: var(--cyan); display: block; }
-  .hero-sub { font-family: 'Share Tech Mono',monospace; font-size: 13px; color: #8899aa; margin-bottom: 36px; line-height: 1.7; animation: fadeUp 0.9s ease both; }
-  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp 1.1s ease both; }
+  .hero-sub { font-family: 'Share Tech Mono',monospace; font-size: 13px; color: #8899aa; margin-bottom: 36px; line-height: 1.7; }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
   .btn-primary { padding: 14px 32px; background: var(--cyan); color: var(--dark); font-family: 'Exo 2',sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; border: none; border-radius: 4px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
   .btn-primary:hover { background: var(--cyan2); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,200,212,0.3); }
   .btn-secondary { padding: 14px 32px; background: transparent; color: #fff; font-family: 'Exo 2',sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 1px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
   .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
   .hero-visual { display: flex; flex-direction: column; gap: 14px; }
-  .stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px 22px; display: flex; align-items: center; gap: 16px; backdrop-filter: blur(10px); transition: transform 0.2s,border-color 0.2s; animation: slideIn 0.6s ease both; }
+  .stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px 22px; display: flex; align-items: center; gap: 16px; backdrop-filter: blur(10px); transition: transform 0.2s,border-color 0.2s; }
   .stat-card:hover { transform: translateX(6px); border-color: rgba(0,200,212,0.3); }
-  .stat-card:nth-child(1) { animation-delay: 0.1s; }
-  .stat-card:nth-child(2) { animation-delay: 0.25s; margin-left: 20px; }
-  .stat-card:nth-child(3) { animation-delay: 0.4s; margin-left: 40px; }
-  .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justifycontent: center; font-size: 20px; flex-shrink: 0; }
+  .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
   .stat-icon.orange { background: rgba(246,166,35,0.15); }
   .stat-icon.cyan { background: rgba(0,200,212,0.15); }
   .stat-icon.green { background: rgba(72,187,120,0.15); }
@@ -316,8 +443,6 @@ const landingCSS = `
   .footer-logo { font-family: 'Share Tech Mono',monospace; color: #667788; font-size: 13px; }
   .footer-logo span { color: var(--cyan); }
   .footer-note { font-family: 'Share Tech Mono',monospace; font-size: 11px; color: #445566; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
   @media (max-width: 900px) { .hero-content,.about-grid { grid-template-columns: 1fr; gap: 40px; } .complaints-grid { grid-template-columns: 1fr 1fr; } .contact-cards { grid-template-columns: 1fr; } }
   @media (max-width: 600px) { nav { padding: 0 16px; } .nav-links { display: none; } .complaints-grid { grid-template-columns: 1fr; } #home,#complaints,#about,#contact { padding-left: 20px; padding-right: 20px; } }
 `

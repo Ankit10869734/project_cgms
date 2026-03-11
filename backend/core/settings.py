@@ -6,11 +6,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-unsafe')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
-
-ALLOWED_HOSTS = ['cgms-hub.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -20,7 +18,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
     # Third party
     'rest_framework',
     'rest_framework.authtoken',
@@ -31,14 +28,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'dj_rest_auth',
     'dj_rest_auth.registration',
-
     # Local
     'main',
     'adminpanel',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # MUST be first
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -104,7 +100,7 @@ REST_AUTH = {
     'JWT_AUTH_HTTPONLY': False,
 }
 
-# allauth — Google only
+# allauth — Google only, no email verification
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
@@ -119,40 +115,32 @@ SOCIALACCOUNT_PROVIDERS = {
         'OAUTH_PKCE_ENABLED': True,
     }
 }
-
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 
 
-# Redirects after login/logout
-ACCOUNT_LOGOUT_REDIRECT_URL = "https://cgms-portal.netlify.app/"
-LOGIN_REDIRECT_URL = "https://cgms-portal.netlify.app/auth-success/"
-ACCOUNT_SIGNUP_REDIRECT_URL = "https://cgms-portal.netlify.app/auth/callback"
+# After Google OAuth, redirect back to React with token in URL
+ACCOUNT_LOGOUT_REDIRECT_URL = "http://localhost:5173/"
+LOGIN_REDIRECT_URL = "/auth-success/"
+ACCOUNT_SIGNUP_REDIRECT_URL = "http://localhost:5173/auth/callback"
 
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://cgms-portal.netlify.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
-
 CORS_ALLOWED_ORIGINS = [
-    "https://cgms-portal.netlify.app",
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
 ]
-
 CORS_ALLOW_CREDENTIALS = True
 
-
 STATIC_URL = '/static/'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
 USE_TZ = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True

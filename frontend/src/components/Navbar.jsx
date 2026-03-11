@@ -7,11 +7,13 @@ export default function Navbar() {
   const { toggleTheme, theme, logout } = useAuthStore()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [userProfile, setUserProfile] = useState(null)
+  const [activeSection, setActiveSection] = useState('home')
   const navigate = useNavigate()
   const location = useLocation()
 
   const isOnLanding = location.pathname === '/'
 
+  // Fetch user profile
   useEffect(() => {
     const token = localStorage.getItem('access')
     if (token) {
@@ -27,6 +29,48 @@ export default function Navbar() {
     }
   }, [])
 
+  // Track active section on scroll
+  useEffect(() => {
+  if (location.pathname !== '/') return;
+  
+  const handleScroll = () => {
+    const sections = ['home', 'complaints', 'about', 'contact'];
+    let current = 'home';
+    
+    // Calculate scroll position relative to document
+    const scrollPosition = window.scrollY + window.innerHeight / 2;
+    
+    // Special case: if near bottom, always show contact
+    const distanceFromBottom = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+    if (distanceFromBottom < 100) {
+      current = 'contact';
+    } else {
+      // Find which section is currently in view
+      sections.forEach(id => {
+        const section = document.getElementById(id);
+        if (section) {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            current = id;
+          }
+        }
+      });
+    }
+    
+    setActiveSection(current);
+  };
+
+  handleScroll();
+  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('resize', handleScroll); // Also listen for zoom changes
+  
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+    window.removeEventListener('resize', handleScroll);
+  };
+}, [location.pathname]);
   const handleLogout = () => {
     logout()
     localStorage.clear()
@@ -40,6 +84,25 @@ export default function Navbar() {
     navigate('/dashboard')
   }
 
+  const scrollToSection = (sectionId) => {
+    if (location.pathname !== '/') {
+      // Navigate to landing page first, then scroll
+      navigate('/');
+      setTimeout(() => {
+        document.getElementById(sectionId)?.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    } else {
+      // Already on landing, just scroll
+      document.getElementById(sectionId)?.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }
+
   return (
     <nav className="navbar">
       <div className="nav-container">
@@ -50,10 +113,46 @@ export default function Navbar() {
         </div>
 
         <ul className="nav-menu">
-          <li><Link to="/" className="nav-link">Home</Link></li>
-          <li><Link to="/complaints" className="nav-link">Complaints</Link></li>
-          <li><a href="/#about" className="nav-link">About</a></li>
-          <li><a href="/#contact" className="nav-link">Contact</a></li>
+          <li>
+            <Link 
+              to="/" 
+              className={`nav-link ${isOnLanding && activeSection === 'home' ? 'active' : ''}`}
+            >
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/complaints" 
+              className={`nav-link ${location.pathname === '/complaints' ? 'active' : ''}`}
+            >
+              Complaints
+            </Link>
+          </li>
+          <li>
+            <a 
+              href="#about" 
+              className={`nav-link ${isOnLanding && activeSection === 'about' ? 'active' : ''}`}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('about');
+              }}
+            >
+              About
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#contact" 
+              className={`nav-link ${isOnLanding && activeSection === 'contact' ? 'active' : ''}`}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('contact');
+              }}
+            >
+              Contact
+            </a>
+          </li>
         </ul>
 
         <div className="nav-actions">

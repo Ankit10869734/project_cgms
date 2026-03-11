@@ -14,7 +14,7 @@
     /* Light Mode Colors */
     --bg-primary: #f0f0f5;
     --bg-secondary: #ffffff;
-    --bg-tertiary: #e8e8f0;
+    --bg-tertiary: #f7f7fb;
     --text-primary: #1a1a2e;
     --text-secondary: #4a4a6a;
     --text-tertiary: #7a7a9a;
@@ -340,6 +340,13 @@ body {
     align-items: center;
     gap: var(--spacing-sm);
 }
+.light-mode .page-title {
+    color: #1a1a2e;
+}
+
+.dark-mode .page-title {
+    color: var(--text-primary);
+}
 
 .title-accent {
     color: var(--accent-primary);
@@ -498,6 +505,13 @@ body {
     align-items: center;
     gap: var(--spacing-sm);
 }
+.light-mode .section-title {
+    color: #1a1a2e;
+}
+
+.dark-mode .section-title {
+    color: var(--text-primary);
+}
 
 /* ================================================
    Quick Actions
@@ -560,10 +574,19 @@ body {
     display: flex;
     gap: var(--spacing-md);
     padding: var(--spacing-md);
-    background: var(--bg-tertiary);
+    background-color: var(--bg-tertiary);
     border-left: 3px solid var(--accent-primary);
     border-radius: var(--radius-sm);
     animation: slideInRight 0.5s ease;
+    transition: background-color var(--transition-fast);
+}
+
+.light-mode .activity-item {
+    background-color: #f7f7fb;
+}
+
+.dark-mode .activity-item {
+    background-color: #1f1f2e;
 }
 
 @keyframes slideInRight {
@@ -607,10 +630,26 @@ body {
     font-size: 0.95rem;
 }
 
+.light-mode .activity-text {
+    color: #1a1a2e;
+}
+
+.dark-mode .activity-text {
+    color: var(--text-primary);
+}
+
 .activity-time {
     color: var(--text-tertiary);
     font-size: 0.85rem;
     margin-top: var(--spacing-xs);
+}
+
+.light-mode .activity-time {
+    color: #4a4a6a;
+}
+
+.dark-mode .activity-time {
+    color: var(--text-tertiary);
 }
 
 /* ================================================
@@ -1680,10 +1719,10 @@ body {
     position: absolute;
     top: 55px;
     right: 0;
-    background: #1e1e2f;
+    background: var(--bg-secondary);
     border-radius: 8px;
     min-width: 140px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow-md);
 
     opacity: 0;
     visibility: hidden;
