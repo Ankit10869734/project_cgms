@@ -6,14 +6,14 @@ export default function Login() {
   const [adminPass, setAdminPass] = useState("");
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://127.0.0.1:8000/accounts/google/login/";
+    window.location.href = "https://cgms-hub.onrender.com/accounts/google/login/";
   };
 
   const handleAdminLogin = async () => {
     console.log("Admin login attempt:", adminUser, adminPass);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/admin/login/", {  // ✅ FIXED: Changed from /admin-auth/login/ to /api/admin/login/
+      const res = await fetch("https://cgms-hub.onrender.com/api/admin/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -60,6 +60,7 @@ export default function Login() {
           </svg>
           Continue with Google
         </button>
+
         <div className="admin-login">
           <h3>Admin Access</h3>
 
@@ -83,6 +84,7 @@ export default function Login() {
             Login as Admin
           </button>
         </div>
+
         <p className="footer-note">
           By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
         </p>
@@ -90,53 +92,92 @@ export default function Login() {
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap');
+
         body, .login-page { background: #0d0d0d; }
+
         .login-page {
-          min-height: 100vh; display: flex; align-items: center;
-          justify-content: center; padding: 2rem; position: relative; overflow: hidden;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+          position: relative;
+          overflow: hidden;
         }
+
         .login-page::before {
-          content: ''; position: fixed; top: -30%; left: 50%; transform: translateX(-50%);
-          width: 600px; height: 600px;
+          content: '';
+          position: fixed;
+          top: -30%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 600px;
+          height: 600px;
           background: radial-gradient(circle, rgba(0,200,255,0.04) 0%, transparent 70%);
           pointer-events: none;
         }
+
         .login-modal {
-          background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px;
-          padding: 2.5rem 2rem; width: 100%; max-width: 420px; text-align: center;
+          background: #1a1a1a;
+          border: 1px solid #2a2a2a;
+          border-radius: 16px;
+          padding: 2.5rem 2rem;
+          width: 100%;
+          max-width: 420px;
+          text-align: center;
           animation: fadeUp 0.4s ease both;
           box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
         }
+
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(20px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .modal-title { font-size: 1.75rem; font-weight: 600; color: #f0f0f0; margin-bottom: 0.6rem; letter-spacing: -0.02em; font-family: 'Sora', sans-serif; }
-        .modal-subtitle { font-size: 0.88rem; color: #888; font-weight: 300; line-height: 1.6; margin-bottom: 2rem; font-family: 'Sora', sans-serif; }
-        .auth-btn {
-          display: flex; align-items: center; justify-content: center; gap: 0.65rem;
-          width: 100%; padding: 0.75rem 1rem; border-radius: 10px;
-          border: 1px solid #2e2e2e; background: #222; color: #d4d4d4;
-          font-family: 'Sora', sans-serif; font-size: 0.9rem; font-weight: 500;
-          cursor: pointer; transition: background 0.18s, border-color 0.18s, transform 0.12s;
-          margin-bottom: 0.75rem;
-        }
-        .auth-btn:hover { background: #2a2a2a; border-color: #3a3a3a; color: #fff; transform: translateY(-1px); }
-        .auth-btn:focus {
-          outline: none;
-          box-shadow: none;
-        }
-        .footer-note { margin-top: 1.5rem; font-size: 0.75rem; color: #555; line-height: 1.6; font-family: 'Sora', sans-serif; }
-        .footer-note a { color: #888; text-decoration: underline; text-underline-offset: 2px; }
-        button:focus {
-          outline: none !important;
-          box-shadow: none !important;
+          to { opacity: 1; transform: translateY(0); }
         }
 
-        button:focus-visible {
-          outline: none !important;
-          box-shadow: none !important;
+        .modal-title {
+          font-size: 1.75rem;
+          font-weight: 600;
+          color: #f0f0f0;
+          margin-bottom: 0.6rem;
+          letter-spacing: -0.02em;
+          font-family: 'Sora', sans-serif;
         }
+
+        .modal-subtitle {
+          font-size: 0.88rem;
+          color: #888;
+          font-weight: 300;
+          line-height: 1.6;
+          margin-bottom: 2rem;
+          font-family: 'Sora', sans-serif;
+        }
+
+        .auth-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.65rem;
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border-radius: 10px;
+          border: 1px solid #2e2e2e;
+          background: #222;
+          color: #d4d4d4;
+          font-family: 'Sora', sans-serif;
+          font-size: 0.9rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.18s, border-color 0.18s, transform 0.12s;
+          margin-bottom: 0.75rem;
+        }
+
+        .auth-btn:hover {
+          background: #2a2a2a;
+          border-color: #3a3a3a;
+          color: #fff;
+          transform: translateY(-1px);
+        }
+
         .admin-login{
           margin-top:20px;
           padding-top:20px;
@@ -178,6 +219,20 @@ export default function Login() {
 
         .admin-btn:hover{
           background:#00a8d4;
+        }
+
+        .footer-note {
+          margin-top: 1.5rem;
+          font-size: 0.75rem;
+          color: #555;
+          line-height: 1.6;
+          font-family: 'Sora', sans-serif;
+        }
+
+        .footer-note a {
+          color: #888;
+          text-decoration: underline;
+          text-underline-offset: 2px;
         }
       `}</style>
     </div>
