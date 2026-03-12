@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% load static %}
+	<link rel="icon" type="image/png" href="{% static 'main/logo.png' %}">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGMS</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body class="light-mode">
+<div class="scanlines" style="pointer-events: none;"></div>
+
+<!-- NAVBAR -->
+{% block navbar %}   <!-- ADD THIS LINE -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <span class="brand-icon">⬢</span>
+            <span class="brand-text">CGMS</span>
+            <span class="brand-subtitle">v2.1</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/" class="nav-link" data-page="home">Home</a></li>
+            <li><a href="#" class="nav-link" data-page="complaints">Complaints</a></li>
+            <li><a href="#" class="nav-link" data-page="about">About</a></li>
+            <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+           {% if user.is_authenticated %}
+<!-- User Profile Picture -->
+<!-- User Profile Picture -->
+{% if user.socialaccount_set.all.0.get_avatar_url %}
+<div class="profile-avatar-wrapper">
+    <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" 
+         alt="Profile" 
+         class="profile-avatar-img"
+         title="{{ user.email }}">
+</div>
+{% else %}
+<div class="profile-avatar" title="{{ user.email }}">
+    {{ user.email|first|upper }}
+</div>
+{% endif %}
+
+<!-- Logout Button -->
+<form action="/accounts/logout/" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+        Logout
+    </button>
+</form>
+{% else %}
+<!-- Login Icon Button -->
+<div class="auth-btn-container">
+    <a href="/accounts/google/login/" class="auth-btn login-btn" data-tooltip="LOG IN">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/>
+        </svg>
+    </a>
+</div>
+
+<!-- Register Icon Button -->
+<div class="auth-btn-container">
+    <a href="/signup/" class="auth-btn register-btn" data-tooltip="SIGN UP">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <line x1="19" y1="8" x2="19" y2="14"/>
+            <line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>
+    </a>
+</div>
+{% endif %}
+            <button class="theme-toggle" id="themeToggle" style="width: 45px; height: 44px;">
+                <span class="theme-icon">◐</span>
+            </button>
+        </div>
+    </div>
+</nav>
+{% endblock %}       <!-- ADD THIS LINE -->
+
+<main class="main-content">
+    {% block content %}
+    {% endblock %}
+</main>
+
+{% block footer %}   <!-- ADD THIS LINE -->
+<footer class="footer">
+    <div class="footer-content">
+        <span class="footer-brand">CGMS v2.1</span>
+        <span>| Complaint Grievance Management System</span>
+    </div>
+</footer>
+{% endblock %}       <!-- ADD THIS LINE -->
+
+<script src="{% static 'main/app.js' %}"></script>
+</body>
+</html>

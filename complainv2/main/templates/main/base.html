@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'main/logo.png' %}">
+    <title>CGMS</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body class="light-mode">
+<div class="scanlines" style="pointer-events: none;"></div>
+
+<!-- NAVBAR -->
+{% block navbar %}
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <span class="brand-icon">⬢</span>
+            <span class="brand-text">CGMS</span>
+            <span class="brand-subtitle">v2.1</span>
+        </div>
+        <ul class="nav-menu">
+    <li><a href="/" class="nav-link" onclick="goToSection('home'); return false;">Home</a></li>
+    <li><a href="/#complaints" class="nav-link" onclick="goToSection('complaints'); return false;">Complaints</a></li>
+    <li><a href="/#about" class="nav-link" onclick="goToSection('about'); return false;">About</a></li>
+    <li><a href="/#contact" class="nav-link" onclick="goToSection('contact'); return false;">Contact</a></li>
+</ul>
+        <div class="nav-actions">
+            {% if user.is_authenticated %}
+                <!-- Profile Dropdown -->
+                <div style="position: relative; display: inline-block;">
+                    <div onclick="toggleDropdown()" style="cursor: pointer;">
+                        {% if user.socialaccount_set.all.0.get_avatar_url %}
+                            <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" 
+                                 alt="Profile" 
+                                 style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent-primary); object-fit: cover;">
+                        {% else %}
+                            <div style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent-primary); background: var(--accent-primary); color: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">
+                                {{ user.email|first|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 55px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); min-width: 180px; box-shadow: var(--shadow-lg); z-index: 1000;">
+                        <a href="/dashboard/" style="display: block; padding: 12px 20px; color: var(--text-primary); text-decoration: none; font-size: 14px; border-bottom: 1px solid var(--border-color); font-family: var(--font-mono);">
+                            Dashboard
+                        </a>
+                        <form action="/accounts/logout/" method="post" style="margin: 0;">
+                            {% csrf_token %}
+                            <button type="submit" style="width: 100%; text-align: left; padding: 12px 20px; background: none; border: none; color: #ff4444; cursor: pointer; font-size: 14px; font-family: var(--font-mono);">
+                                LOGOUT
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Login Icon Button -->
+                <div class="auth-btn-container">
+                    <a href="/accounts/google/login/" class="auth-btn login-btn" data-tooltip="LOG IN">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Register Icon Button -->
+                <div class="auth-btn-container">
+                    <a href="/signup/" class="auth-btn register-btn" data-tooltip="SIGN UP">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <line x1="19" y1="8" x2="19" y2="14"/>
+                            <line x1="22" y1="11" x2="16" y2="11"/>
+                        </svg>
+                    </a>
+                </div>
+            {% endif %}
+            
+            <button class="theme-toggle" id="themeToggle" style="width: 45px; height: 45px;">
+                <span class="theme-icon">◐</span>
+            </button>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+<main class="main-content">
+    {% block content %}
+    {% endblock %}
+</main>
+
+{% block footer %}
+<footer class="footer">
+    <div class="footer-content">
+        <span class="footer-brand">CGMS v2.1</span>
+        <span>| Complaint Grievance Management System</span>
+    </div>
+</footer>
+{% endblock %}
+
+<script src="{% static 'main/app.js' %}"></script>
+<script>
+// Profile dropdown toggle
+function toggleDropdown() {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown) {
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+// Close dropdown when clicking outside
+window.addEventListener('click', function(event) {
+    if (!event.target.closest('[onclick="toggleDropdown()"]')) {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.style.display = 'none';
+    }
+});
+</script>
+<script>
+// Scroll to section after page load
+window.addEventListener('load', function() {
+    if (window.location.hash) {
+        setTimeout(function() {
+            const element = document.querySelector(window.location.hash);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 100);
+    }
+});
+</script>
+<script>
+function goToSection(section) {
+    // If we're not on the home page, redirect there first
+    if (!window.location.pathname.endsWith('/') || window.location.pathname !== '/') {
+        window.location.href = '/#' + section;
+    } else {
+        // We're already on home, just scroll
+        const element = document.getElementById(section);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+}
+</script>
+</body>
+</html>

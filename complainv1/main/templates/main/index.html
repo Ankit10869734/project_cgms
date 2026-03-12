@@ -1,0 +1,377 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+        
+        <!-- HOME PAGE -->
+        <section id="homePage" class="page active">
+            <div class="page-header">
+                <h1 class="page-title">
+                    <span class="title-accent">></span> System Dashboard
+                </h1>
+                <p class="page-subtitle">Real-time complaint management & analytics</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon pending-icon">◉</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Pending</div>
+                        <div class="stat-value" id="statPending">0</div>
+                    </div>
+                    <div class="stat-trend up">+2 today</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon progress-icon">◐</div>
+                    <div class="stat-content">
+                        <div class="stat-label">In Progress</div>
+                        <div class="stat-value" id="statProgress">0</div>
+                    </div>
+                    <div class="stat-trend">Active</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon resolved-icon">◎</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Resolved</div>
+                        <div class="stat-value" id="statResolved">0</div>
+                    </div>
+                    <div class="stat-trend down">-3 this week</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon total-icon">◈</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total</div>
+                        <div class="stat-value" id="statTotal">0</div>
+                    </div>
+                    <div class="stat-trend">All time</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-container">
+                <h2 class="section-title">
+                    <span class="title-accent">></span> Quick Actions
+                </h2>
+                <div class="quick-actions">
+                    <button class="action-btn primary" id="quickAddComplaint">
+                        <span class="btn-icon">+</span>
+                        <span>New Complaint</span>
+                    </button>
+                    <button class="action-btn secondary" data-page="complaints">
+                        <span class="btn-icon">◈</span>
+                        <span>View All</span>
+                    </button>
+                    <button class="action-btn secondary" id="exportBtn">
+                        <span class="btn-icon">↓</span>
+                        <span>Export Data</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="section-container">
+                <h2 class="section-title">
+                    <span class="title-accent">></span> Recent Activity
+                </h2>
+                <div class="activity-feed" id="activityFeed">
+                    <div class="activity-item">
+                        <div class="activity-dot"></div>
+                        <div class="activity-content">
+                            <div class="activity-text">System initialized</div>
+                            <div class="activity-time">Just now</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPLAINTS PAGE -->
+        <section id="complaintsPage" class="page">
+            <div class="page-header">
+                <h1 class="page-title">
+                    <span class="title-accent">></span> Complaint Registry
+                </h1>
+                <p class="page-subtitle">Manage and track all complaints</p>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <button class="btn btn-primary" id="addComplaintBtn">
+                        <span class="btn-icon">+</span>
+                        New Complaint
+                    </button>
+                    
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">
+                            <span>⊞</span>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <span>☰</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="toolbar-right">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search complaints..." class="search-input">
+                        <span class="search-icon">⌕</span>
+                    </div>
+                    
+                    <select id="filterStatus" class="filter-select">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                    
+                    <select id="filterPriority" class="filter-select">
+                        <option value="all">All Priority</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                    
+                    <select id="sortBy" class="filter-select">
+                        <option value="date-desc">Latest First</option>
+                        <option value="date-asc">Oldest First</option>
+                        <option value="priority">Priority</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Complaints Container -->
+            <div id="complaintsContainer" class="complaints-grid">
+                <!-- Complaints will be dynamically inserted here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state">
+                <div class="empty-icon">◈</div>
+                <h3>No Complaints Found</h3>
+                <p>Start by adding your first complaint or adjust your filters.</p>
+                <button class="btn btn-primary" id="emptyAddBtn">
+                    <span class="btn-icon">+</span>
+                    Add Complaint
+                </button>
+            </div>
+        </section>
+
+        <!-- ABOUT PAGE -->
+        <section id="aboutPage" class="page">
+            <div class="page-header">
+                <h1 class="page-title">
+                    <span class="title-accent">></span> About CGMS
+                </h1>
+                <p class="page-subtitle">Complaint Grievance Management System</p>
+            </div>
+
+            <div class="content-container">
+                <div class="about-grid">
+                    <div class="about-card">
+                        <div class="about-icon">◈</div>
+                        <h3>Smart Management</h3>
+                        <p>Intelligent complaint tracking with real-time status updates and priority-based sorting algorithms.</p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon">◎</div>
+                        <h3>Data Analytics</h3>
+                        <p>Comprehensive dashboard with statistics, trends, and insights for better decision making.</p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon">◐</div>
+                        <h3>User Experience</h3>
+                        <p>Retro-futuristic interface with light/dark modes, smooth animations, and intuitive controls.</p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon">◉</div>
+                        <h3>Secure Storage</h3>
+                        <p>Local data persistence with browser storage, ensuring your complaints are safely maintained.</p>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h2 class="section-title">
+                        <span class="title-accent">></span> Features
+                    </h2>
+                    <ul class="feature-list">
+                        <li><span class="feature-bullet">▸</span> Create, Read, Update, Delete complaints</li>
+                        <li><span class="feature-bullet">▸</span> Priority levels: Low, Medium, High, Critical</li>
+                        <li><span class="feature-bullet">▸</span> Status tracking: Pending, In Progress, Resolved, Closed</li>
+                        <li><span class="feature-bullet">▸</span> Advanced search and filtering capabilities</li>
+                        <li><span class="feature-bullet">▸</span> Multiple view modes: Grid and List</li>
+                        <li><span class="feature-bullet">▸</span> Data export functionality</li>
+                        <li><span class="feature-bullet">▸</span> Real-time statistics dashboard</li>
+                        <li><span class="feature-bullet">▸</span> Responsive design for all devices</li>
+                        <li><span class="feature-bullet">▸</span> Light and Dark theme modes</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h2 class="section-title">
+                        <span class="title-accent">></span> Technology Stack
+                    </h2>
+                    <div class="tech-badges">
+                        <span class="tech-badge">HTML5</span>
+                        <span class="tech-badge">CSS3</span>
+                        <span class="tech-badge">JavaScript ES6+</span>
+                        <span class="tech-badge">LocalStorage API</span>
+                        <span class="tech-badge">Responsive Design</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT PAGE -->
+        <section id="contactPage" class="page">
+            <div class="page-header">
+                <h1 class="page-title">
+                    <span class="title-accent">></span> Contact & Support
+                </h1>
+                <p class="page-subtitle">Get in touch with us</p>
+            </div>
+
+            <div class="content-container">
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">✉</div>
+                        <h3>Email Support</h3>
+                        <p>support@cgms.system</p>
+                        <a href="mailto:support@cgms.system" class="contact-link">Send Email →</a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">☎</div>
+                        <h3>Phone</h3>
+                        <p>+1 (555) 123-4567</p>
+                        <a href="tel:+15551234567" class="contact-link">Call Now →</a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">⌂</div>
+                        <h3>Office Location</h3>
+                        <p>123 Tech Street<br>Digital City, DC 12345</p>
+                        <a href="#" class="contact-link">Get Directions →</a>
+                    </div>
+                </div>
+
+                <div class="contact-form-section">
+                    <h2 class="section-title">
+                        <span class="title-accent">></span> Send Message
+                    </h2>
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactName">Name</label>
+                                <input type="text" id="contactName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" id="contactEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactSubject">Subject</label>
+                            <input type="text" id="contactSubject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage">Message</label>
+                            <textarea id="contactMessage" rows="6" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-icon">→</span>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for Add/Edit Complaint -->
+    <div id="complaintModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">New Complaint</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <form id="complaintForm" class="complaint-form">
+                <input type="hidden" id="complaintId">
+                
+                <div class="form-group">
+                    <label for="complaintTitle">Title *</label>
+                    <input type="text" id="complaintTitle" required placeholder="Brief description of the issue">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="complaintCategory">Category *</label>
+                        <select id="complaintCategory" required>
+                            <option value="">Select category</option>
+                            <option value="technical">Technical</option>
+                            <option value="administrative">Administrative</option>
+                            <option value="infrastructure">Infrastructure</option>
+                            <option value="service">Service Quality</option>
+                            <option value="safety">Safety & Security</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="complaintPriority">Priority *</label>
+                        <select id="complaintPriority" required>
+                            <option value="">Select priority</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="complaintDescription">Description *</label>
+                    <textarea id="complaintDescription" rows="5" required placeholder="Detailed description of the complaint"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="complaintLocation">Location</label>
+                        <input type="text" id="complaintLocation" placeholder="e.g., Building A, Room 201">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="complaintReporter">Reporter Name *</label>
+                        <input type="text" id="complaintReporter" required placeholder="Your name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="complaintContact">Contact Information</label>
+                    <input type="text" id="complaintContact" placeholder="Email or phone number">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-icon">✓</span>
+                        <span id="submitBtnText">Submit Complaint</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+{% endblock %}
